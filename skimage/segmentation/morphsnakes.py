@@ -294,12 +294,12 @@ def morphological_chan_vese(image, num_iter, init_level_set='checkerboard',
 
         # inside = u > 0
         # outside = u <= 0
-        c0 = (image * (1 - u)).sum() / float((1 - u).sum() + 1e-8)
-        c1 = (image * u).sum() / float(u.sum() + 1e-8)
+        c0 = np.nansum(image * (1 - u)) / float(np.nansum(1 - u) + 1e-8)
+        c1 = np.nansum(image * u) / float(np.nansum(u) + 1e-8)
 
         # Image attachment
         du = np.gradient(u)
-        abs_du = np.abs(du).sum(0)
+        abs_du = np.nansum(np.abs(du), axis=0)
         aux = abs_du * (lambda1 * (image - c1)**2 - lambda2 * (image - c0)**2)
 
         u[aux < 0] = 1
